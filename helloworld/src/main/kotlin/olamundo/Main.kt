@@ -1,5 +1,5 @@
 package olamundo
 
-fun main(args: Array<String>) {
+fun main() {
     println("Ola mundo")
 }
