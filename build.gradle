@@ -1,9 +1,15 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.30'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
+
+    // Spring
+    id 'org.springframework.boot' version "2.1.5.RELEASE"
+    id 'io.spring.dependency-management' version "1.0.7.RELEASE"
+    id "org.jetbrains.kotlin.plugin.spring" version "1.3.31"
 }
 
-version '1.0-SNAPSHOT'
+group "com.dasiusp.cleber"
+version '0.0.1'
 
 sourceCompatibility = 1.8
 
@@ -12,8 +18,21 @@ repositories {
 }
 
 dependencies {
+    // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+
+    // Spring
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+    // KotlinTest
+    testImplementation "io.kotlintest:kotlintest-runner-junit5:3.3.2"
+    testImplementation "io.kotlintest:kotlintest-extensions-spring:3.3.2"
+
+    // Mockk
+    testImplementation "io.mockk:mockk:1.9.3"
 }
 
 compileKotlin {
@@ -21,4 +40,8 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+test {
+    useJUnitPlatform()
 }
