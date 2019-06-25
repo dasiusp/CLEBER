@@ -3,7 +3,7 @@ Certificados Livremente Emitidos, Burocratizados E Ratificados pelo DASI
 
 # Visão do negócio de funcionalidades
 
-[![imagem negocio](assets/Diagramas/CLEBER%20-%20Vis%C3%A3o%20Neg%C3%B3cio.png)](assets/Diagramas/CLEBER%20-%20Vis%C3%A3o%20Neg%C3%B3cio.png)
+[![imagem negocio](assets/Diagramas/CLEBER%20-%20Visão%20Negócio.png)](assets/Diagramas/CLEBER%20-%20Visão%20Negócio.png)
 
 # Visão técnica e atualização
 [![imagem técnica](assets/Diagramas/CLEBER%20-%20Visão%20Tècnica.png)](assets/Diagramas/CLEBER%20-%20Visão%20Tècnica.png)
