@@ -32,7 +32,7 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
             val stripper = PDFTextStripper()
             val text = stripper.getText(document)
             println(text)
-            text shouldContain "Certificamos que Jorgineo participou do evento Palestra Semana do sei la oq realizado na Escola \nde Artes Ciencias e Humanidades da Universidade de Sao Paulo EACH-USP, com duraçao de \n300 horas. Sao Paulo 20/7/2019"
+            text shouldContain "Certificamos que Jorgineo participou do evento Palestra Semana do sei la oq realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de 300 horas. São Paulo 20/7/2019"
         }
     }
     
