@@ -18,6 +18,7 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
     private val eventType = "Palestra"
     private val eventName = "Semana do sei la oq"
     private val Hours = 300
+    private val fontDirectory = "assets/fonts"
 
     init {
         test("Should create file in the specified directory") {
@@ -32,12 +33,12 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
             val stripper = PDFTextStripper()
             val text = stripper.getText(document)
             println(text)
-            text shouldContain "Certificamos que Jorgineo participou do evento Palestra Semana do sei la oq realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de 300 horas. São Paulo 20/7/2019"
+            text shouldContain "Certificamos que Jorgineo participou do evento Palestra Semana do sei la oq realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de 300 horas. São Paulo, 20/7/2019."
         }
     }
     
     private fun createFooBarPdf() {
-        HelloWorldPdfGenerator(testDirectory, personName, Day, Month, Year, eventType, eventName, Hours).createPdf("FooBar")
+        HelloWorldPdfGenerator(testDirectory, personName, Day, Month, Year, eventType, eventName, Hours, fontDirectory).createPdf("FooBar")
     }
     
     override fun beforeTest(testCase: TestCase) {

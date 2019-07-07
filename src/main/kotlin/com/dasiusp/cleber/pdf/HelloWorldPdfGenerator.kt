@@ -17,7 +17,8 @@ class HelloWorldPdfGenerator(
     private val Year: Int,
     private val eventType: String,
     private val eventName: String,
-    private val Hours: Int
+    private val Hours: Int,
+    private val fontDirectory: String
 ) {
     
     init {
@@ -38,11 +39,20 @@ class HelloWorldPdfGenerator(
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
         
         document.use {
-            FontFactory.register("assets/arial.ttf", "fontearial")
-            val ArialFont = FontFactory.getFont("fontearial", 18.0f)
-            val text1 = Phrase("Certificamos que $personName participou do evento $eventType $eventName realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de $Hours horas. São Paulo $Day/$Month/$Year", Font(ArialFont))
-
+            FontFactory.register("$fontDirectory/arial.ttf", "fontearial")
+            FontFactory.register("$fontDirectory/merriweather.ttf", "fontemerriweather")
+            val ArialFont1 = FontFactory.getFont("fontearial", 18.0f)
+            val ArialFont2 = FontFactory.getFont("fontearial", 14.0f)
+            val Merriweather = FontFactory.getFont("fontemerriweather", 24.0f)
+            val text0 = Paragraph ("Certificado de Participação", Merriweather)
+            val text1 = Paragraph("\nCertificamos que $personName participou do evento $eventType $eventName realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de $Hours horas.", Font(ArialFont1))
+            val text2 = Paragraph("\nSão Paulo, $Day/$Month/$Year.", ArialFont2)
+            text0.setAlignment(Element.ALIGN_CENTER)
+            text1.setAlignment(Element.ALIGN_JUSTIFIED)
+            text2.setAlignment(Element.ALIGN_CENTER)
+            add(text0)
             add(text1)
+            add(text2)
             //add(text1 ("Certificamos que $personName participou do evento $eventType $eventName realizado na Escola de Artes Ciencias e Humanidades da Universidade de Sao Paulo EACH-USP, com duraçao de $Hours horas. Sao Paulo $Day/$Month/$Year"))
         }
     }
