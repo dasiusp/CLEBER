@@ -19,6 +19,7 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
     private val eventName = "Semana do sei la oq"
     private val Hours = 300
     private val fontDirectory = "assets/fonts"
+    private val Token = "Token de Validação"
 
     init {
         test("Should create file in the specified directory") {
@@ -38,7 +39,7 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
     }
     
     private fun createFooBarPdf() {
-        HelloWorldPdfGenerator(testDirectory, personName, Day, Month, Year, eventType, eventName, Hours, fontDirectory).createPdf("FooBar")
+        HelloWorldPdfGenerator(testDirectory, personName, Day, Month, Year, eventType, eventName, Hours, fontDirectory, Token).createPdf("FooBar")
     }
     
     override fun beforeTest(testCase: TestCase) {
