@@ -1,24 +1,27 @@
 package com.dasiusp.cleber.pdf
 
+import com.dasiusp.cleber.pdf.PDFFont.bodyFont
+import com.dasiusp.cleber.pdf.PDFFont.bottomFont
+import com.dasiusp.cleber.pdf.PDFFont.titleFont
+import com.dasiusp.cleber.pdf.PDFFont.tokenFont
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfWriter
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDate
-import kotlin.coroutines.coroutineContext
 
-
+data class Certificate(
+    val personName: String,
+    val date: LocalDate,
+    val eventType: String,
+    val eventName: String,
+    val duration: Int,
+    val token: String
+)
 class HelloWorldPdfGenerator(
-    private val outputDirectory: String,
-    private val personName: String,
-    private val date: LocalDate,
-    private val eventType: String,
-    private val eventName: String,
-    private val duration: Int,
-    private val fontDirectory: String,
-    private val token: String
+    private val outputDirectory: String
 ) {
-    
+
     init {
         createOutputDirectory()
     }
@@ -26,32 +29,27 @@ class HelloWorldPdfGenerator(
     private fun createOutputDirectory() {
         File(outputDirectory).mkdirs()
     }
-    
-    fun createPdf(name: String) {
-        val targetFile = File(outputDirectory, "$name.pdf")
-        writeDocument(targetFile, name)
+
+    fun createPdf(certificate: Certificate) {
+        val targetFile = File(outputDirectory, "${certificate.token}.pdf")
+        writeDocument(targetFile, certificate)
     }
 
-    fun registerFont(fontName: String, alias: String, size: Float): Font {
-        FontFactory.register("$fontDirectory/$fontName.ttf", "$alias")
-        return FontFactory.getFont("$alias", size)
-    }
-
-    fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
+    private fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
         val paragraph = Paragraph(text,font)
-        paragraph.setAlignment(alignment)
+        paragraph.alignment = alignment
         return paragraph
     }
 
-    private fun writeDocument(targetFile: File, name: String) {
+    private fun writeDocument(targetFile: File, certificate: Certificate) {
         val document = Document()
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
         
         document.use {
-            add(writeParagraph("Certificado de Participação", registerFont("merriweather","merriweatherfont", 24f), 1))
-            add(writeParagraph("\nCertificamos que $personName participou do evento $eventType $eventName realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de $duration horas.", registerFont("arial","arialfont", 18f), 3))
-            add(writeParagraph("\nSão Paulo, ${date.dayOfMonth}/${date.monthValue}/${date.year}.", registerFont("arial", "arialfont", 14f), 1))
-            add(writeParagraph("\n$token", registerFont("bold", "boldfont", 14f), 1))
+            add(writeParagraph("Certificado de Participação", titleFont, 1))
+            add(writeParagraph("\nCertificamos que ${certificate.personName} participou do evento ${certificate.eventType} ${certificate.eventName} realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de ${certificate.duration} horas.", bodyFont, 3))
+            add(writeParagraph("\nSão Paulo, ${certificate.date}.", bottomFont, 1))
+            add(writeParagraph("\n${certificate.token}", tokenFont, 1))
         }
     }
     
@@ -59,5 +57,17 @@ class HelloWorldPdfGenerator(
         open()
         block()
         close()
+    }
+}
+
+private object PDFFont {
+    val titleFont = registerFont("merriweather","merriweatherfont", 24f)
+    val bodyFont = registerFont("arial", "arialfont", 18f)
+    val bottomFont = registerFont("arial", "arialfont", 14f)
+    val tokenFont = registerFont("bold", "boldfont", 14f)
+
+    private fun registerFont(fontName: String, alias: String, size: Float): Font {
+        FontFactory.register("assets/fonts/$fontName.ttf", alias)
+        return FontFactory.getFont(alias, size)
     }
 }
