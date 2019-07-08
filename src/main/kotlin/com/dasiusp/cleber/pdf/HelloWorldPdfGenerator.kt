@@ -4,22 +4,19 @@ import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfWriter
 import java.io.File
 import java.io.FileOutputStream
-import com.itextpdf.text.Font.BOLDITALIC
-import com.itextpdf.text.FontFactory.HELVETICA
-import com.itextpdf.text.pdf.BaseFont
+import java.time.LocalDate
+import kotlin.coroutines.coroutineContext
 
 
 class HelloWorldPdfGenerator(
     private val outputDirectory: String,
     private val personName: String,
-    private val Day: Int,
-    private val Month: Int,
-    private val Year: Int,
+    private val date: LocalDate,
     private val eventType: String,
     private val eventName: String,
-    private val Hours: Int,
+    private val duration: Int,
     private val fontDirectory: String,
-    private val Token: String
+    private val token: String
 ) {
     
     init {
@@ -34,32 +31,27 @@ class HelloWorldPdfGenerator(
         val targetFile = File(outputDirectory, "$name.pdf")
         writeDocument(targetFile, name)
     }
-    
+
+    fun registerFont(fontName: String, alias: String, size: Float): Font {
+        FontFactory.register("$fontDirectory/$fontName.ttf", "$alias")
+        return FontFactory.getFont("$alias", size)
+    }
+
+    fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
+        val paragraph = Paragraph(text,font)
+        paragraph.setAlignment(alignment)
+        return paragraph
+    }
+
     private fun writeDocument(targetFile: File, name: String) {
         val document = Document()
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
         
         document.use {
-            FontFactory.register("$fontDirectory/arial.ttf", "fontearial")
-            FontFactory.register("$fontDirectory/arialbd.tff", "fontearialbold")
-            FontFactory.register("$fontDirectory/merriweather.ttf", "fontemerriweather")
-            val ArialFont1 = FontFactory.getFont("fontearial", 18.0f)
-            val ArialFont2 = FontFactory.getFont("fontearial", 14.0f)
-            val Bold = FontFactory.getFont("fontearialbold", 14.0f, Font.BOLD)
-            val Merriweather = FontFactory.getFont("fontemerriweather", 24.0f)
-            val text0 = Paragraph ("Certificado de Participação", Font(Merriweather))
-            val text1 = Paragraph("\nCertificamos que $personName participou do evento $eventType $eventName realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de $Hours horas.", Font(ArialFont1))
-            val text2 = Paragraph("\nSão Paulo, $Day/$Month/$Year.", Font(ArialFont2))
-            val text3 = Paragraph("\n$Token", Font(Bold))
-            text0.setAlignment(Element.ALIGN_CENTER)
-            text1.setAlignment(Element.ALIGN_JUSTIFIED)
-            text2.setAlignment(Element.ALIGN_CENTER)
-            text3.setAlignment(Element.ALIGN_CENTER)
-            add(text0)
-            add(text1)
-            add(text2)
-            add(text3)
-            //add(text1 ("Certificamos que $personName participou do evento $eventType $eventName realizado na Escola de Artes Ciencias e Humanidades da Universidade de Sao Paulo EACH-USP, com duraçao de $Hours horas. Sao Paulo $Day/$Month/$Year"))
+            add(writeParagraph("Certificado de Participação", registerFont("merriweather","merriweatherfont", 24f), 1))
+            add(writeParagraph("\nCertificamos que $personName participou do evento $eventType $eventName realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de $duration horas.", registerFont("arial","arialfont", 18f), 3))
+            add(writeParagraph("\nSão Paulo, ${date.dayOfMonth}/${date.monthValue}/${date.year}.", registerFont("arial", "arialfont", 14f), 1))
+            add(writeParagraph("\n$token", registerFont("bold", "boldfont", 14f), 1))
         }
     }
     

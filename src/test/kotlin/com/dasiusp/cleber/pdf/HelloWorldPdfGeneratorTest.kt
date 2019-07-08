@@ -7,19 +7,18 @@ import io.kotlintest.specs.FunSpec
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
 import java.io.File
+import java.time.LocalDate
 
 class HelloWorldPdfGeneratorTest : FunSpec() {
     
     private val testDirectory = "out/test/test"
     private val personName = "Jorgineo"
-    private val Day = 20
-    private val Month = 7
-    private val Year = 2019
+    private val date = LocalDate.parse("2019-07-22")
     private val eventType = "Palestra"
     private val eventName = "Semana do sei la oq"
-    private val Hours = 300
+    private val duration = 300
     private val fontDirectory = "assets/fonts"
-    private val Token = "Token de Validação"
+    private val token = "Token de Validação"
 
     init {
         test("Should create file in the specified directory") {
@@ -39,7 +38,7 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
     }
     
     private fun createFooBarPdf() {
-        HelloWorldPdfGenerator(testDirectory, personName, Day, Month, Year, eventType, eventName, Hours, fontDirectory, Token).createPdf("FooBar")
+        HelloWorldPdfGenerator(testDirectory, personName, date, eventType, eventName, duration, fontDirectory, token).createPdf("FooBar")
     }
     
     override fun beforeTest(testCase: TestCase) {
