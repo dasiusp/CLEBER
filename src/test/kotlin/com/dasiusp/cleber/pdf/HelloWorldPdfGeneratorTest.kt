@@ -12,13 +12,13 @@ import java.time.LocalDate
 class HelloWorldPdfGeneratorTest : FunSpec() {
     
     private val testDirectory = "out/test/test"
-    private val personName = "Jorgineo"
+    /*private val personName = "Jorgineo"
     private val date = LocalDate.parse("2019-07-22")
     private val eventType = "Palestra"
     private val eventName = "Semana do sei la oq"
     private val duration = 300
     private val fontDirectory = "assets/fonts"
-    private val token = "Token de Validação"
+    private val token = "Token de Validação"*/
 
     init {
         test("Should create file in the specified directory") {
@@ -38,7 +38,8 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
     }
     
     private fun createFooBarPdf() {
-        HelloWorldPdfGenerator(testDirectory, personName, date, eventType, eventName, duration, fontDirectory, token).createPdf("FooBar")
+        val certificate = Certificate("Joao", LocalDate.parse("2019-07-20"), "Palestra", "do Jorge", 300, "FooBar")
+        HelloWorldPdfGenerator(testDirectory).createPdf(certificate)
     }
     
     override fun beforeTest(testCase: TestCase) {

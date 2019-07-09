@@ -35,22 +35,46 @@ class HelloWorldPdfGenerator(
         writeDocument(targetFile, certificate)
     }
 
-    private fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
-        val paragraph = Paragraph(text,font)
-        paragraph.alignment = alignment
-        return paragraph
-    }
-
     private fun writeDocument(targetFile: File, certificate: Certificate) {
         val document = Document()
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
         
         document.use {
-            add(writeParagraph("Certificado de Participação", titleFont, 1))
-            add(writeParagraph("\nCertificamos que ${certificate.personName} participou do evento ${certificate.eventType} ${certificate.eventName} realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de ${certificate.duration} horas.", bodyFont, 3))
-            add(writeParagraph("\nSão Paulo, ${certificate.date}.", bottomFont, 1))
-            add(writeParagraph("\n${certificate.token}", tokenFont, 1))
+            addTitle(document)
+            addBody(document, certificate)
+            addPlaceandDate(document, certificate)
+            addToken(document, certificate)
         }
+    }
+
+    private fun addTitle(document: Document) {
+        document.use {
+            add(writeParagraph("Certificado de Participação", titleFont, Element.ALIGN_CENTER))
+        }
+    }
+
+    private fun addBody(document: Document, certificate: Certificate) {
+        document.use {
+            add(writeParagraph("Certificamos que ${certificate.personName} participou do evento ${certificate.eventType} ${certificate.eventName} realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de ${certificate.duration} horas.", bodyFont, Element.ALIGN_JUSTIFIED))
+        }
+    }
+
+    private fun addPlaceandDate (document: Document, certificate: Certificate) {
+        document.use {
+            add(writeParagraph("\nSão Paulo, ${certificate.date}.", bottomFont, Element.ALIGN_CENTER))
+        }
+    }
+
+    private fun addToken (document: Document, certificate: Certificate) {
+        document.use {
+            add(writeParagraph("${certificate.token}", tokenFont, Element.ALIGN_CENTER))
+        }
+    }
+
+    private fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
+        val paragraph = Paragraph(text,font)
+        paragraph.alignment = alignment
+        return paragraph
     }
     
     private fun Document.use(block: Document.() -> Unit) {
