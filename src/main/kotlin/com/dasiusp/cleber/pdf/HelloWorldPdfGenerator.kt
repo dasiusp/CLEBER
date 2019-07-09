@@ -40,35 +40,27 @@ class HelloWorldPdfGenerator(
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
         
         document.use {
-            addTitle(document)
-            addBody(document, certificate)
-            addPlaceandDate(document, certificate)
-            addToken(document, certificate)
+            document.addTitle()
+            document.addBody(certificate)
+            document.addPlaceandDate(certificate)
+            document.addToken(certificate)
         }
     }
 
-    private fun addTitle(document: Document) {
-        document.use {
+    private fun Document.addTitle() {
             add(writeParagraph("Certificado de Participação", titleFont, Element.ALIGN_CENTER))
-        }
     }
 
-    private fun addBody(document: Document, certificate: Certificate) {
-        document.use {
+    private fun Document.addBody(certificate: Certificate) {
             add(writeParagraph("Certificamos que ${certificate.personName} participou do evento ${certificate.eventType} ${certificate.eventName} realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de ${certificate.duration} horas.", bodyFont, Element.ALIGN_JUSTIFIED))
-        }
     }
 
-    private fun addPlaceandDate (document: Document, certificate: Certificate) {
-        document.use {
-            add(writeParagraph("\nSão Paulo, ${certificate.date}.", bottomFont, Element.ALIGN_CENTER))
-        }
+    private fun Document.addPlaceandDate (certificate: Certificate) {
+            add(writeParagraph("São Paulo, ${certificate.date}.", bottomFont, Element.ALIGN_CENTER))
     }
 
-    private fun addToken (document: Document, certificate: Certificate) {
-        document.use {
+    private fun Document.addToken (certificate: Certificate) {
             add(writeParagraph("${certificate.token}", tokenFont, Element.ALIGN_CENTER))
-        }
     }
 
     private fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
