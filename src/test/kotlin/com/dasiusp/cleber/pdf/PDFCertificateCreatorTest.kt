@@ -27,7 +27,7 @@ class PDFCertificateCreatorTest : FunSpec() {
             val document = loadDocument()
             val stripper = PDFTextStripper()
             val text = stripper.getText(document)
-            text.withoutLinebreaks() shouldContain "Certificado de Participação Certificamos que Joao Joanino da Silva Pereira participou do evento Palestra do Jorge realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de 300 horas. São Paulo, 20/07/2019. FooBar"
+            text.withoutLinebreaks() shouldContain "Certificado de participação Certificamos que Joao Joanino da Silva Pereira participou do evento Palestra do Jorge realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de 300 horas. São Paulo, 20/07/2019. FooBar"
         }
 
         test("Should create file in landscape format") {
@@ -35,6 +35,7 @@ class PDFCertificateCreatorTest : FunSpec() {
             val document = loadDocument()
             document.pages[0].rotation shouldBe 90
         }
+
     }
 
     private fun String.withoutLinebreaks(): String {
@@ -42,7 +43,13 @@ class PDFCertificateCreatorTest : FunSpec() {
     }
 
     private fun createFooBarPdf() {
-        PDFCertificateCreator(testDirectory).createPdf(certificate)
+        PDFCertificateCreator(
+            testDirectory,
+            "Certificado de participação",
+            "Certificamos que %NOME_PESSOA% participou do evento %TIPO_EVENTO% %NOME_EVENTO% realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de %DURACAO% horas.",
+            "São Paulo, %DATA%.",
+            "%TOKEN%"
+        ).createPdf(certificate)
     }
 
     private fun loadDocument(): PDDocument {

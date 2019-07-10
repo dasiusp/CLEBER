@@ -6,10 +6,12 @@ import com.dasiusp.cleber.pdf.PDFFont.titleFont
 import com.dasiusp.cleber.pdf.PDFFont.tokenFont
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfWriter
+import org.springframework.beans.factory.annotation.Value
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import org.springframework.stereotype.Component
 
 data class Certificate(
     val personName: String,
@@ -20,8 +22,13 @@ data class Certificate(
     val token: String
 )
 
+@Component
 class PDFCertificateCreator(
-    private val outputDirectory: String
+    @Value("\${certificate.output.directory}") private val certificateOutputDirectory: String,
+    @Value("\${certificate.title.text}") private val certificateTitleText: String,
+    @Value("\${certificate.body.text}") private val certificateBodyText: String,
+    @Value("\${certificate.place.and.date.text}") private val certificatePlaceAndDateText: String,
+    @Value("\${certificate.token.text}") private val certificateTokenText: String
 ) {
 
     init {
@@ -29,11 +36,11 @@ class PDFCertificateCreator(
     }
 
     private fun createOutputDirectory() {
-        File(outputDirectory).mkdirs()
+        File(certificateOutputDirectory).mkdirs()
     }
 
     fun createPdf(certificate: Certificate) {
-        val targetFile = File(outputDirectory, "${certificate.token}.pdf")
+        val targetFile = File(certificateOutputDirectory, "${certificate.token}.pdf")
         writeDocument(targetFile, certificate)
     }
 
@@ -50,29 +57,37 @@ class PDFCertificateCreator(
     }
 
     private fun Document.addTitle() {
-        add(writeParagraph("Certificado de Participação", titleFont, Element.ALIGN_CENTER))
+        add(writeParagraph(certificateTitleText, titleFont, Element.ALIGN_CENTER))
     }
 
     private fun Document.addBody(certificate: Certificate) {
         add(
             writeParagraph(
-                "Certificamos que ${certificate.personName} participou do evento ${certificate.eventType} ${certificate.eventName} realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de ${certificate.duration} horas.",
-                bodyFont,
-                Element.ALIGN_JUSTIFIED
+                certificateBodyText.insertCertificateData(
+                    certificate.personName,
+                    "NOME_PESSOA"
+                ).insertCertificateData(certificate.eventType, "TIPO_EVENTO").insertCertificateData(
+                    certificate.eventName,
+                    "NOME_EVENTO"
+                ).insertCertificateData("${certificate.duration}", "DURACAO"), bodyFont, Element.ALIGN_JUSTIFIED
             )
         )
     }
 
     private fun Document.addPlaceandDate(certificate: Certificate) {
-        add(writeParagraph("São Paulo, ${certificate.date.formatDate()}.", bottomFont, Element.ALIGN_CENTER))
+        add(writeParagraph(certificatePlaceAndDateText.insertCertificateData(certificate.date.formatDate(), "DATA"), bottomFont, Element.ALIGN_CENTER))
     }
 
     private fun Document.addToken(certificate: Certificate) {
-        add(writeParagraph("${certificate.token}", tokenFont, Element.ALIGN_CENTER))
+        add(writeParagraph(certificateTokenText.insertCertificateData(certificate.token, "TOKEN"), tokenFont, Element.ALIGN_CENTER))
     }
 
     private fun LocalDate.formatDate(): String {
         return format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    }
+
+    private fun String.insertCertificateData(certificateData: String, dataReference: String): String {
+        return replace("%$dataReference%", certificateData)
     }
 
     private fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
