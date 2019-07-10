@@ -13,7 +13,6 @@ import java.time.LocalDate
 class PDFCertificateCreatorTest : FunSpec() {
 
     private val testDirectory = "out/test/test"
-    private val document = createDocument()
     private val certificate =
         Certificate("Joao Joanino da Silva Pereira", LocalDate.of(2019, 7, 20), "Palestra", "do Jorge", 300, "FooBar")
 
@@ -25,8 +24,7 @@ class PDFCertificateCreatorTest : FunSpec() {
 
         test("Should write basic text to file") {
             createFooBarPdf()
-
-            val document = PDDocument.load(File(testDirectory, "FooBar.pdf"))
+            val document = loadDocument()
             val stripper = PDFTextStripper()
             val text = stripper.getText(document)
             text.withoutLinebreaks() shouldContain "Certificado de Participação Certificamos que Joao Joanino da Silva Pereira participou do evento Palestra do Jorge realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de 300 horas. São Paulo, 20/07/2019. FooBar"
@@ -34,6 +32,7 @@ class PDFCertificateCreatorTest : FunSpec() {
 
         test("Should create file in landscape format") {
             createFooBarPdf()
+            val document = loadDocument()
             document.pages[0].rotation shouldBe 90
         }
     }
@@ -46,7 +45,7 @@ class PDFCertificateCreatorTest : FunSpec() {
         PDFCertificateCreator(testDirectory).createPdf(certificate)
     }
 
-    private fun createDocument(): PDDocument {
+    private fun loadDocument(): PDDocument {
         return PDDocument.load(File(testDirectory, "FooBar.pdf"))
     }
 

@@ -38,7 +38,7 @@ class PDFCertificateCreator(
     }
 
     private fun writeDocument(targetFile: File, certificate: Certificate) {
-        val document = Document(PageSize.A4.rotate(), 10f, 10f, 100f, 0f)
+        val document = Document(PageSize.A4.rotate())
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
 
         document.use {
