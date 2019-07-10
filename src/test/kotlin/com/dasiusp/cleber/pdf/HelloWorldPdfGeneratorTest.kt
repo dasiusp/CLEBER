@@ -12,13 +12,7 @@ import java.time.LocalDate
 class HelloWorldPdfGeneratorTest : FunSpec() {
     
     private val testDirectory = "out/test/test"
-    /*private val personName = "Jorgineo"
-    private val date = LocalDate.parse("2019-07-22")
-    private val eventType = "Palestra"
-    private val eventName = "Semana do sei la oq"
-    private val duration = 300
-    private val fontDirectory = "assets/fonts"
-    private val token = "Token de Validação"*/
+    val certificate = Certificate("Joao Joanino da Silva Pereira", LocalDate.parse("2019-07-20"), "Palestra", "do Jorge", 300, "FooBar")
 
     init {
         test("Should create file in the specified directory") {
@@ -32,13 +26,17 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
             val document = PDDocument.load(File(testDirectory, "FooBar.pdf"))
             val stripper = PDFTextStripper()
             val text = stripper.getText(document)
-            println(text)
-            text shouldContain "Certificado de Participação\nCertificamos que Joao participou do evento Palestra do Jorge\nrealizado na Escola de Artes Ciências e Humanidades da\nUniversidade de São Paulo EACH-USP, com duração de 300\nhoras.\nSão Paulo, 2019-07-20.\nFooBar"
+            breaklineRemover(text) shouldContain "Certificado de Participação Certificamos que ${certificate.personName} participou do evento ${certificate.eventType} ${certificate.eventName} realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de ${certificate.duration} horas. São Paulo, ${certificate.date}. ${certificate.token}"
         }
+    }
+
+    private fun breaklineRemover (text: String): String {
+        val auxString = text.replace("\n", " ")
+        val resultantString = auxString.replace("\r", "")
+        return resultantString
     }
     
     private fun createFooBarPdf() {
-        val certificate = Certificate("Joao", LocalDate.parse("2019-07-20"), "Palestra", "do Jorge", 300, "FooBar")
         HelloWorldPdfGenerator(testDirectory).createPdf(certificate)
     }
     
