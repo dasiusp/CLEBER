@@ -10,19 +10,20 @@ import java.io.File
 import java.time.LocalDate
 
 class PDFCertificateCreatorTest : FunSpec() {
-    
+
     private val testDirectory = "out/test/test"
-    private val certificate = Certificate("Joao Joanino da Silva Pereira", LocalDate.of(2019, 7, 20), "Palestra", "do Jorge", 300, "FooBar")
+    private val certificate =
+        Certificate("Joao Joanino da Silva Pereira", LocalDate.of(2019, 7, 20), "Palestra", "do Jorge", 300, "FooBar")
 
     init {
         test("Should create file in the specified directory") {
             createFooBarPdf()
             File(testDirectory).shouldContainFile("FooBar.pdf")
         }
-        
+
         test("Should write basic text to file") {
             createFooBarPdf()
-            
+
             val document = PDDocument.load(File(testDirectory, "FooBar.pdf"))
             val stripper = PDFTextStripper()
             val text = stripper.getText(document)
@@ -30,14 +31,14 @@ class PDFCertificateCreatorTest : FunSpec() {
         }
     }
 
-    private fun String.withoutLinebreaks (): String {
+    private fun String.withoutLinebreaks(): String {
         return replace("\r", "").replace("\n", " ")
     }
-    
+
     private fun createFooBarPdf() {
         PDFCertificateCreator(testDirectory).createPdf(certificate)
     }
-    
+
     override fun beforeTest(testCase: TestCase) {
         File(testDirectory).deleteRecursively()
     }
