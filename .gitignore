@@ -2,7 +2,7 @@ build/
 .gradle/
 .idea/
 .DS_STORE
-.iml
+CLEBER.iml
 
 # Project exclude paths
 /out/
