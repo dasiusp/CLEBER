@@ -8,12 +8,11 @@ import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
 import java.io.File
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-class HelloWorldPdfGeneratorTest : FunSpec() {
+class PDFCertificateCreatorTest : FunSpec() {
     
     private val testDirectory = "out/test/test"
-    val certificate = Certificate("Joao Joanino da Silva Pereira", LocalDate.of(2019, 7, 20), "Palestra", "do Jorge", 300, "FooBar")
+    private val certificate = Certificate("Joao Joanino da Silva Pereira", LocalDate.of(2019, 7, 20), "Palestra", "do Jorge", 300, "FooBar")
 
     init {
         test("Should create file in the specified directory") {
@@ -36,7 +35,7 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
     }
     
     private fun createFooBarPdf() {
-        HelloWorldPdfGenerator(testDirectory).createPdf(certificate)
+        PDFCertificateCreator(testDirectory).createPdf(certificate)
     }
     
     override fun beforeTest(testCase: TestCase) {

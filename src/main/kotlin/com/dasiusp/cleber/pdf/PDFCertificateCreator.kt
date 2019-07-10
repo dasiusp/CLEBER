@@ -19,7 +19,7 @@ data class Certificate(
     val duration: Int,
     val token: String
 )
-class HelloWorldPdfGenerator(
+class PDFCertificateCreator(
     private val outputDirectory: String
 ) {
 
@@ -41,10 +41,10 @@ class HelloWorldPdfGenerator(
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
         
         document.use {
-            document.addTitle()
-            document.addBody(certificate)
-            document.addPlaceandDate(certificate)
-            document.addToken(certificate)
+            addTitle()
+            addBody(certificate)
+            addPlaceandDate(certificate)
+            addToken(certificate)
         }
     }
 
@@ -64,7 +64,7 @@ class HelloWorldPdfGenerator(
             add(writeParagraph("${certificate.token}", tokenFont, Element.ALIGN_CENTER))
     }
 
-    private fun LocalDate.formatDate (): String {
+    private fun LocalDate.formatDate(): String {
             return format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     }
 
