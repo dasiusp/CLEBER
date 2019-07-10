@@ -9,6 +9,7 @@ import com.itextpdf.text.pdf.PdfWriter
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 data class Certificate(
     val personName: String,
@@ -56,11 +57,15 @@ class HelloWorldPdfGenerator(
     }
 
     private fun Document.addPlaceandDate (certificate: Certificate) {
-            add(writeParagraph("São Paulo, ${certificate.date}.", bottomFont, Element.ALIGN_CENTER))
+            add(writeParagraph("São Paulo, ${certificate.date.formatDate()}.", bottomFont, Element.ALIGN_CENTER))
     }
 
     private fun Document.addToken (certificate: Certificate) {
             add(writeParagraph("${certificate.token}", tokenFont, Element.ALIGN_CENTER))
+    }
+
+    private fun LocalDate.formatDate (): String {
+            return format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     }
 
     private fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {

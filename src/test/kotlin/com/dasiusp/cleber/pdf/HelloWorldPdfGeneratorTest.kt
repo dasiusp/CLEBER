@@ -8,11 +8,12 @@ import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.text.PDFTextStripper
 import java.io.File
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class HelloWorldPdfGeneratorTest : FunSpec() {
     
     private val testDirectory = "out/test/test"
-    val certificate = Certificate("Joao Joanino da Silva Pereira", LocalDate.parse("2019-07-20"), "Palestra", "do Jorge", 300, "FooBar")
+    val certificate = Certificate("Joao Joanino da Silva Pereira", LocalDate.of(2019, 7, 20), "Palestra", "do Jorge", 300, "FooBar")
 
     init {
         test("Should create file in the specified directory") {
@@ -26,14 +27,12 @@ class HelloWorldPdfGeneratorTest : FunSpec() {
             val document = PDDocument.load(File(testDirectory, "FooBar.pdf"))
             val stripper = PDFTextStripper()
             val text = stripper.getText(document)
-            breaklineRemover(text) shouldContain "Certificado de Participação Certificamos que ${certificate.personName} participou do evento ${certificate.eventType} ${certificate.eventName} realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de ${certificate.duration} horas. São Paulo, ${certificate.date}. ${certificate.token}"
+            text.withoutLinebreaks() shouldContain "Certificado de Participação Certificamos que Joao Joanino da Silva Pereira participou do evento Palestra do Jorge realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de 300 horas. São Paulo, 20/07/2019. FooBar"
         }
     }
 
-    private fun breaklineRemover (text: String): String {
-        val auxString = text.replace("\n", " ")
-        val resultantString = auxString.replace("\r", "")
-        return resultantString
+    private fun String.withoutLinebreaks (): String {
+        return replace("\r", "").replace("\n", " ")
     }
     
     private fun createFooBarPdf() {
