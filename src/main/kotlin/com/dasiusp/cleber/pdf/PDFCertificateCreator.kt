@@ -7,11 +7,11 @@ import com.dasiusp.cleber.pdf.PDFFont.tokenFont
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfWriter
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import org.springframework.stereotype.Component
 
 data class Certificate(
     val personName: String,
@@ -51,7 +51,7 @@ class PDFCertificateCreator(
         document.use {
             addTitle()
             addBody(certificate)
-            addPlaceandDate(certificate)
+            addPlaceAndDate(certificate)
             addToken(certificate)
         }
     }
@@ -61,32 +61,30 @@ class PDFCertificateCreator(
     }
 
     private fun Document.addBody(certificate: Certificate) {
-        add(
-            writeParagraph(
-                certificateBodyText.insertCertificateData(
-                    certificate.personName,
-                    "NOME_PESSOA"
-                ).insertCertificateData(certificate.eventType, "TIPO_EVENTO").insertCertificateData(
-                    certificate.eventName,
-                    "NOME_EVENTO"
-                ).insertCertificateData("${certificate.duration}", "DURACAO"), bodyFont, Element.ALIGN_JUSTIFIED
-            )
-        )
+        add(writeParagraph(createBodyText(certificate), bodyFont, Element.ALIGN_JUSTIFIED))
     }
 
-    private fun Document.addPlaceandDate(certificate: Certificate) {
-        add(writeParagraph(certificatePlaceAndDateText.insertCertificateData(certificate.date.formatDate(), "DATA"), bottomFont, Element.ALIGN_CENTER))
+    private fun createBodyText(certificate: Certificate): String {
+        return  certificateBodyText
+            .replaceCertificateData("NOME_PESSOA", certificate.personName)
+            .replaceCertificateData("TIPO_EVENTO", certificate.eventType)
+            .replaceCertificateData("NOME_EVENTO", certificate.eventName)
+            .replaceCertificateData("DURACAO", "${certificate.duration}")
+    }
+
+    private fun Document.addPlaceAndDate(certificate: Certificate) {
+        add(writeParagraph(certificatePlaceAndDateText.replaceCertificateData("DATA", certificate.date.formatDate()), bottomFont, Element.ALIGN_CENTER))
     }
 
     private fun Document.addToken(certificate: Certificate) {
-        add(writeParagraph(certificateTokenText.insertCertificateData(certificate.token, "TOKEN"), tokenFont, Element.ALIGN_CENTER))
+        add(writeParagraph(certificateTokenText.replaceCertificateData("TOKEN", certificate.token), tokenFont, Element.ALIGN_CENTER))
     }
 
     private fun LocalDate.formatDate(): String {
         return format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     }
 
-    private fun String.insertCertificateData(certificateData: String, dataReference: String): String {
+    private fun String.replaceCertificateData(dataReference: String, certificateData: String): String {
         return replace("%$dataReference%", certificateData)
     }
 
