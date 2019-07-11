@@ -51,7 +51,7 @@ class PDFCertificateCreator(
         document.use {
             addTitle()
             addBody(certificate)
-            addPlaceAndDate(certificate)
+            addPlaceandDate(certificate)
             addToken(certificate)
         }
     }
@@ -65,27 +65,29 @@ class PDFCertificateCreator(
     }
 
     private fun createBodyText(certificate: Certificate): String {
-        return  certificateBodyText
-            .replaceCertificateData("NOME_PESSOA", certificate.personName)
-            .replaceCertificateData("TIPO_EVENTO", certificate.eventType)
-            .replaceCertificateData("NOME_EVENTO", certificate.eventName)
-            .replaceCertificateData("DURACAO", "${certificate.duration}")
+        return certificateBodyText
+            .replace("%NOME_PESSOA%", certificate.personName)
+            .replace("%TIPO_EVENTO%", certificate.eventType)
+            .replace("%NOME_EVENTO%", certificate.eventName)
+            .replace("%DURACAO%", "${certificate.duration}")
     }
 
-    private fun Document.addPlaceAndDate(certificate: Certificate) {
-        add(writeParagraph(certificatePlaceAndDateText.replaceCertificateData("DATA", certificate.date.formatDate()), bottomFont, Element.ALIGN_CENTER))
+    private fun Document.addPlaceandDate(certificate: Certificate) {
+        add(
+            writeParagraph(
+                certificatePlaceAndDateText.replace("%DATA%", certificate.date.formatDate()),
+                bottomFont,
+                Element.ALIGN_CENTER
+            )
+        )
     }
 
     private fun Document.addToken(certificate: Certificate) {
-        add(writeParagraph(certificateTokenText.replaceCertificateData("TOKEN", certificate.token), tokenFont, Element.ALIGN_CENTER))
+        add(writeParagraph(certificateTokenText.replace("%TOKEN%", certificate.token), tokenFont, Element.ALIGN_CENTER))
     }
 
     private fun LocalDate.formatDate(): String {
         return format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-    }
-
-    private fun String.replaceCertificateData(dataReference: String, certificateData: String): String {
-        return replace("%$dataReference%", certificateData)
     }
 
     private fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
