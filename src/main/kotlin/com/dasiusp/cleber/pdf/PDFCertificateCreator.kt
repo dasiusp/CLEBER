@@ -52,49 +52,33 @@ class PDFCertificateCreator(
     private fun writeDocument(targetFile: File, certificate: Certificate) {
         val document = Document(PageSize.A4.rotate())
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
-
+        
+        val replacer = CertificateTextReplacer(certificate)
+        
         document.use {
-            addTitle(certificate)
-            addBody(certificate)
-            addPlaceAndDate(certificate)
-            addToken(certificate)
+            addCertificateTitle(replacer.title)
+            addCertificateBody(replacer.body)
+            addCertificatePlaceAndDate(replacer.placeAndDate)
+            addCertificateToken(replacer.token)
         }
     }
 
-    private fun Document.addTitle(certificate: Certificate) {
-        add(writeParagraph(certificateTitleText.withReplacedVariables(certificate), titleFont, Element.ALIGN_CENTER))
+    private fun Document.addCertificateTitle(title: String) {
+        add(writeParagraph(title, titleFont, Element.ALIGN_CENTER))
     }
 
-    private fun Document.addBody(certificate: Certificate) {
-        add(writeParagraph(certificateBodyText.withReplacedVariables(certificate), bodyFont, Element.ALIGN_JUSTIFIED))
+    private fun Document.addCertificateBody(body: String) {
+        add(writeParagraph(body, bodyFont, Element.ALIGN_JUSTIFIED))
     }
     
-    private fun Document.addPlaceAndDate(certificate: Certificate) {
-        add(
-            writeParagraph(
-                certificatePlaceAndDateText.withReplacedVariables(certificate),
-                bottomFont,
-                Element.ALIGN_CENTER
-            )
-        )
+    private fun Document.addCertificatePlaceAndDate(placeAndDate: String) {
+        add(writeParagraph(placeAndDate, bottomFont, Element.ALIGN_CENTER))
     }
     
-    private fun Document.addToken(certificate: Certificate) {
-        add(writeParagraph(certificateTokenText.withReplacedVariables(certificate), tokenFont, Element.ALIGN_CENTER))
+    private fun Document.addCertificateToken(token: String) {
+        add(writeParagraph(token, tokenFont, Element.ALIGN_CENTER))
     }
     
-    private fun String.withReplacedVariables(certificate: Certificate): String {
-        return replace("%NOME_PESSOA%", certificate.personName)
-            .replace("%TIPO_EVENTO%", certificate.eventType)
-            .replace("%NOME_EVENTO%", certificate.eventName)
-            .replace("%DURACAO%", "${certificate.duration}")
-            .replace("%DATA%", certificate.date.formatDate())
-            .replace("%TOKEN%", certificate.token)
-    }
-
-    private fun LocalDate.formatDate(): String {
-        return format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-    }
 
     private fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
         val paragraph = Paragraph(text, font)
@@ -106,6 +90,25 @@ class PDFCertificateCreator(
         open()
         block()
         close()
+    }
+    
+    private inner class CertificateTextReplacer(val certificate: Certificate) {
+        
+        val title = certificateTitleText.withReplacedVariables()
+        val body = certificateBodyText.withReplacedVariables()
+        val placeAndDate = certificatePlaceAndDateText.withReplacedVariables()
+        val token = certificateTokenText.withReplacedVariables()
+    
+        private fun String.withReplacedVariables(): String {
+            return replace("%NOME_PESSOA%", certificate.personName)
+                .replace("%TIPO_EVENTO%", certificate.eventType)
+                .replace("%NOME_EVENTO%", certificate.eventName)
+                .replace("%DURACAO%", "${certificate.duration}")
+                .replace("%DATA%", certificate.date.formatDate())
+                .replace("%TOKEN%", certificate.token)
+        }
+    
+        private fun LocalDate.formatDate() = format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     }
 }
 
