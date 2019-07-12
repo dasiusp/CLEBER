@@ -13,6 +13,7 @@ import java.time.LocalDate
 class PDFCertificateCreatorTest : FunSpec() {
 
     private val testDirectory = "out/test/test"
+    private val testImagesDirectory = "src/main/resources/images"
     private val certificate =
         Certificate("Joao Joanino da Silva Pereira", LocalDate.of(2019, 7, 20), "Palestra", "do Jorge", 300, "FooBar")
 
@@ -39,12 +40,13 @@ class PDFCertificateCreatorTest : FunSpec() {
     }
 
     private fun String.withoutLinebreaks(): String {
-        return replace("\r", "").replace("\n", " ")
+        return replace("\r", "").replace("\n", " ").replace("   "," ")
     }
 
     private fun createFooBarPdf() {
         PDFCertificateCreator(
             testDirectory,
+            testImagesDirectory,
             "Certificado de participação",
             "Certificamos que %NOME_PESSOA% participou do evento %TIPO_EVENTO% %NOME_EVENTO% realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de %DURACAO% horas.",
             "São Paulo, %DATA%.",

@@ -4,19 +4,18 @@ import com.dasiusp.cleber.pdf.PDFFont.bodyFont
 import com.dasiusp.cleber.pdf.PDFFont.bottomFont
 import com.dasiusp.cleber.pdf.PDFFont.titleFont
 import com.dasiusp.cleber.pdf.PDFFont.tokenFont
-import com.itextpdf.text.Document
-import com.itextpdf.text.Element
-import com.itextpdf.text.Font
-import com.itextpdf.text.FontFactory
-import com.itextpdf.text.PageSize
-import com.itextpdf.text.Paragraph
+import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfWriter
+import com.sun.scenario.effect.ImageData
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.swing.text.AttributeSet
+import com.itextpdf.text.pdf.PdfContentByte
+
 
 data class Certificate(
     val personName: String,
@@ -30,6 +29,7 @@ data class Certificate(
 @Component
 class PDFCertificateCreator(
     @Value("\${certificate.output.directory}") private val certificateOutputDirectory: String,
+    @Value("\${certificate.images.directory}") private val certificateImagesDirectory: String,
     @Value("\${certificate.title.text}") private val certificateTitleText: String,
     @Value("\${certificate.body.text}") private val certificateBodyText: String,
     @Value("\${certificate.place.and.date.text}") private val certificatePlaceAndDateText: String,
@@ -50,38 +50,51 @@ class PDFCertificateCreator(
     }
 
     private fun writeDocument(targetFile: File, certificate: Certificate) {
-        val document = Document(PageSize.A4.rotate())
+        val document = Document(PageSize.A4.rotate(), 112.68f, 112.68f, 194.02f, 125.07f)
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
-        
+
         val replacer = CertificateTextReplacer(certificate)
-        
+
         document.use {
             addCertificateTitle(replacer.title)
             addCertificateBody(replacer.body)
             addCertificatePlaceAndDate(replacer.placeAndDate)
             addCertificateToken(replacer.token)
+            addCertificateImage("logo", 380f, 450f, 30f)
+            addCertificateImage("line", (56f/1.34f), (43f/1.34f), 75f)
+            addCertificateImage("line", (56f/1.34f), pageSize.height-(43f/1.34f), 75f)
+
         }
     }
 
     private fun Document.addCertificateTitle(title: String) {
-        add(writeParagraph(title, titleFont, Element.ALIGN_CENTER))
+        val para = writeParagraph(title, titleFont, Element.ALIGN_CENTER, 20f)
+        para.spacingAfter = 25f
+        add(para)
     }
 
     private fun Document.addCertificateBody(body: String) {
-        add(writeParagraph(body, bodyFont, Element.ALIGN_JUSTIFIED))
-    }
-    
-    private fun Document.addCertificatePlaceAndDate(placeAndDate: String) {
-        add(writeParagraph(placeAndDate, bottomFont, Element.ALIGN_CENTER))
-    }
-    
-    private fun Document.addCertificateToken(token: String) {
-        add(writeParagraph(token, tokenFont, Element.ALIGN_CENTER))
-    }
-    
+        add(writeParagraph(body, bodyFont, Element.ALIGN_JUSTIFIED, 30f))
 
-    private fun writeParagraph(text: String, font: Font, alignment: Int): Paragraph {
-        val paragraph = Paragraph(text, font)
+    }
+
+    private fun Document.addCertificatePlaceAndDate(placeAndDate: String) {
+        add(writeParagraph(placeAndDate, bottomFont, Element.ALIGN_CENTER, 60f))
+    }
+
+    private fun Document.addCertificateToken(token: String) {
+        add(writeParagraph(token, tokenFont, Element.ALIGN_CENTER, 60f))
+    }
+
+    private fun Document.addCertificateImage(fileName: String, positionX: Float, positionY: Float, scalePercent: Float) {
+        val image = Image.getInstance("$certificateImagesDirectory/$fileName.jpg")
+        image.setAbsolutePosition(positionX, positionY)
+        image.scalePercent(scalePercent)
+        add(image)
+    }
+
+    private fun writeParagraph(text: String, font: Font, alignment: Int, leading: Float): Paragraph {
+        val paragraph = Paragraph(leading, text, font)
         paragraph.alignment = alignment
         return paragraph
     }
@@ -91,14 +104,14 @@ class PDFCertificateCreator(
         block()
         close()
     }
-    
+
     private inner class CertificateTextReplacer(val certificate: Certificate) {
-        
+
         val title = certificateTitleText.withReplacedVariables()
         val body = certificateBodyText.withReplacedVariables()
         val placeAndDate = certificatePlaceAndDateText.withReplacedVariables()
         val token = certificateTokenText.withReplacedVariables()
-    
+
         private fun String.withReplacedVariables(): String {
             return replace("%NOME_PESSOA%", certificate.personName)
                 .replace("%TIPO_EVENTO%", certificate.eventType)
@@ -107,7 +120,7 @@ class PDFCertificateCreator(
                 .replace("%DATA%", certificate.date.formatDate())
                 .replace("%TOKEN%", certificate.token)
         }
-    
+
         private fun LocalDate.formatDate() = format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
     }
 }
