@@ -13,7 +13,7 @@ import java.time.LocalDate
 class PDFCertificateCreatorTest : FunSpec() {
 
     private val testDirectory = "out/test/test"
-    private val testImagesDirectory = "src/main/resources/images"
+    private val testImagesDirectory = "images"
     private val certificate =
         Certificate("Joao Joanino da Silva Pereira", LocalDate.of(2019, 7, 20), "Palestra", "do Jorge", 300, "FooBar")
 

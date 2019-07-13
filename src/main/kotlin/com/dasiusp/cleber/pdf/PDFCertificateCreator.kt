@@ -7,6 +7,7 @@ import com.dasiusp.cleber.pdf.PDFFont.tokenFont
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfWriter
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import org.springframework.util.ResourceUtils
 import java.io.File
@@ -49,7 +50,7 @@ class PDFCertificateCreator(
     }
 
     private fun writeDocument(targetFile: File, certificate: Certificate) {
-        val document = Document(PageSize.A4.rotate(), 112.68f, 112.68f, 194.02f, 125.07f) //Os floats definem as margens esquerda, direita, acima e abaixo respectivamente, visando melhoria estética.
+        val document = Document(PageSize.A4.rotate(), 112.68f, 112.68f, 194.02f, 125.07f) //These float values define margins: left, right, top and bottom respectively. They aim asthetic improvement.
         PdfWriter.getInstance(document, FileOutputStream(targetFile))
 
         val replacer = CertificateTextReplacer(certificate)
@@ -59,14 +60,14 @@ class PDFCertificateCreator(
             addCertificateBody(replacer.body)
             addCertificatePlaceAndDate(replacer.placeAndDate)
             addCertificateToken(replacer.token)
-            addCertificateImage("logo", 380f, 450f, 30f) //Esses valores de posição foram obtidos por tentativa e erro. Eles visam centralizar o logo na parte superior do PDF.
-            addCertificateImage("line", (56f/1.34f), (43f/1.34f), 75f) //Cada imagem pode ser colocado em qualquer lugar do PDF.
+            addCertificateImage("logo", 380f, 450f, 30f) //These position values were obtained through trial and error. They aim to centralize the logo at the top.
+            addCertificateImage("line", (56f/1.34f), (43f/1.34f), 75f) //Each image can be placed anywhere in the PDF.
             addCertificateImage("line", (56f/1.34f), pageSize.height-(43f/1.34f), 75f)
         }
     }
 
     private fun Document.addCertificateTitle(title: String) {
-        val para = writeParagraph(title, titleFont, Element.ALIGN_CENTER, 20f) //O float "leading" foi escolhido em cada parágrafo apenas por questão estética.
+        val para = writeParagraph(title, titleFont, Element.ALIGN_CENTER, 20f) //The "leading" value was chosen for asthetic purposes only.
         para.spacingAfter = 25f
         add(para)
     }
@@ -85,7 +86,10 @@ class PDFCertificateCreator(
     }
 
     private fun Document.addCertificateImage(fileName: String, positionX: Float, positionY: Float, scalePercent: Float) {
-        val file = File("$certificateImagesDirectory/$fileName.jpg")
+
+        val resource = ClassPathResource("${certificateImagesDirectory}/$fileName.jpg")
+        val file = resource.file
+
         val image = Image.getInstance(ImageIO.read(file), null)
         image.setAbsolutePosition(positionX, positionY)
         image.scalePercent(scalePercent)
