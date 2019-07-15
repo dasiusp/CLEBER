@@ -71,3 +71,6 @@ configure<AppEngineStandardExtension> {
         version = "${props["version.major"]}-${props["version.minor"]}-${props["version.patch"]}"
     }
 }
+springBoot {
+    mainClassName = "endpoint.Application"
+}
