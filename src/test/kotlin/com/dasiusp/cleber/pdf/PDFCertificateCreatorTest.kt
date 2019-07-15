@@ -40,7 +40,7 @@ class PDFCertificateCreatorTest : FunSpec() {
     }
 
     private fun String.withoutLinebreaks(): String {
-        return replace("\r", "").replace("\n", " ").replace("   "," ")
+        return replace("\r", "").replace("\n", " ").replace("   ", " ")
     }
 
     private fun createFooBarPdf() {
