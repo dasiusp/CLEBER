@@ -15,7 +15,7 @@ class HelloController {
         val dateFormattedText: String = dateUnformattedText.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
         return Hello(
-            "$name", "$email","$eventType", "$dateFormattedText", "$duration horas"
+            "$name", "$email","$eventType", "$dateFormattedText", duration
         )
     }
 
