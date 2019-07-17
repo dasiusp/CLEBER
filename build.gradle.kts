@@ -36,9 +36,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     
     // PDF
-    implementation(group = "com.itextpdf", name = "itextpdf", version = "5.5.13")
-
-    testImplementation(group= "org.apache.pdfbox", name= "pdfbox", version= "2.0.15")
+    implementation(group= "org.apache.pdfbox", name= "pdfbox", version= "2.0.15")
 
     // KotlinTest
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.2")

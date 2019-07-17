@@ -1,0 +1,5 @@
+certificate:
+  title: "Certificado de participação"
+  body: "Certificamos que %NOME_PESSOA% participou do evento %TIPO_EVENTO% %NOME_EVENTO% realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de %DURACAO% horas."
+  place.and.date: "São Paulo, %DATA%."
+  token: "Token = %TOKEN%"
