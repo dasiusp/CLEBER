@@ -1,5 +1,6 @@
 package com.dasiusp.cleber.pdf
 
+import com.dasiusp.cleber.certificate.Certificate
 import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FunSpec
