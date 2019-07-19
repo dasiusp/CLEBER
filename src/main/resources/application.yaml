@@ -1,5 +1,23 @@
 certificate:
   title: "Certificado de participação"
-  body: "Certificamos que %NOME_PESSOA% participou do evento %TIPO_EVENTO% %NOME_EVENTO% realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de %DURACAO% horas."
+  body: >-
+    Certificamos que %NOME_PESSOA% participou do evento %TIPO_EVENTO% %NOME_EVENTO% realizado
+    na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração
+    de %DURACAO% horas.
   place.and.date: "São Paulo, %DATA%."
   token: "Token = %TOKEN%"
+
+email:
+  mailgun.api.key.url: "https://runtimeconfig.googleapis.com/v1beta1/projects/cleber-244103/configs/APIs/variables/mailgun"
+  from: "DASI-USP <no-reply@dasiusp.com>"
+  attachment.name: "Certificado.pdf"
+  subject: "Certificado de Participação - %NOME_EVENTO%"
+  body: |-
+    Olá, %NOME_PESSOA%!
+
+    Agradecemos a sua participação em %NOME_EVENTO%!
+
+    Aqui está o seu certificado de participação. Esperamos você em nossa próxima atividade!
+
+    Atenciosamente,
+    DASI-USP
