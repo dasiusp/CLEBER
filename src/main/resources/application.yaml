@@ -21,3 +21,6 @@ email:
 
     Atenciosamente,
     DASI-USP
+
+firestore:
+  certificate.collection: "certificate"
