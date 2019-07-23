@@ -9,7 +9,7 @@ class CertificateTextReplacer(private val certificate: Certificate) {
         .replace("%NOME_PESSOA%", certificate.personName)
         .replace("%TIPO_EVENTO%", certificate.eventType)
         .replace("%NOME_EVENTO%", certificate.eventName)
-        .replace("%DURACAO%", "${certificate.duration}")
+        .replace("%DURACAO%", "${certificate.durationInHours}")
         .replace("%DATA%", certificate.date.formatDate())
         .replace("%TOKEN%", certificate.token)
     
