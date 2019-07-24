@@ -1,4 +1,4 @@
-package com.dasiusp.cleber.email
+package com.dasiusp.cleber.infrastructure.service.email
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FunSpec
@@ -12,7 +12,10 @@ class MailgunApiKeyFetcherTest : FunSpec() {
 
     private val restTemplate: RestTemplate = mockk()
     
-    private val target = MailgunApiKeyFetcher(restTemplate, expectedGCloudUrl)
+    private val target = MailgunApiKeyFetcher(
+        restTemplate,
+        expectedGCloudUrl
+    )
     
     init {
         test("Should make a plain get request") {

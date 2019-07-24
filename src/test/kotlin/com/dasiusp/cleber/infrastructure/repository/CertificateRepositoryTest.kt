@@ -1,13 +1,12 @@
-package com.dasiusp.cleber.infrastructure
+package com.dasiusp.cleber.infrastructure.repository
 
-import com.dasiusp.cleber.certificate.Certificate
+import com.dasiusp.cleber.type.certificate
 import com.google.cloud.firestore.CollectionReference
 import com.google.cloud.firestore.Firestore
 import io.kotlintest.specs.FunSpec
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.LocalDate
 
 class CertificateRepositoryTest : FunSpec() {
     
@@ -15,15 +14,13 @@ class CertificateRepositoryTest : FunSpec() {
     
     private val target = CertificateRepository(firestore, "collection")
     
-    private val certificate = Certificate("Person", LocalDate.of(1998, 2, 9), "EventType", "EventName", 30, "token")
-    
     init {
         test("Should insert the document id as the certificate token") {
             val collection = mockCollection()
             
             target.insert(certificate)
             
-            verify { collection.document(certificate.token) }
+            verify { collection.document(certificate.token.toString()) }
         }
         
         test("Should insert certificate's field in generated document") {
@@ -31,9 +28,7 @@ class CertificateRepositoryTest : FunSpec() {
     
             target.insert(certificate)
     
-            verify { collection.document("token").set(CertificateEntity(
-                "Person", "1998-02-09", "EventName", 30, "token"
-            )) }
+            verify { collection.document(certificate.token.toString()).set(CertificateEntity(certificate)) }
         }
     }
     

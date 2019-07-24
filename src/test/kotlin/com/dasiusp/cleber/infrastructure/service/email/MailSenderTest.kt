@@ -1,6 +1,6 @@
-package com.dasiusp.cleber.email
+package com.dasiusp.cleber.infrastructure.service.email
 
-import com.dasiusp.cleber.certificate.Certificate
+import com.dasiusp.cleber.type.certificate
 import io.kotlintest.IsolationMode
 import io.kotlintest.IsolationMode.InstancePerTest
 import io.kotlintest.matchers.collections.shouldHaveSingleElement
@@ -18,14 +18,20 @@ import org.springframework.util.Base64Utils
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForObject
-import java.time.LocalDate
 
 class MailSenderTest : FunSpec() {
     
     private val restTemplate: RestTemplate = mockk(relaxed = true)
     private val mailgunApiKeyFetcher = mockKeyFetcher()
     
-    private val target = MailSender(mailgunApiKeyFetcher, restTemplate, "example@example.com", "%NOME_PESSOA%", "%NOME_PESSOA%", "Certificado.pdf")
+    private val target = MailSender(
+        mailgunApiKeyFetcher,
+        restTemplate,
+        "example@example.com",
+        "%NOME_PESSOA%",
+        "%NOME_PESSOA%",
+        "Certificado.pdf"
+    )
     
     init {
         test("Should get key from api fetcher") {
@@ -75,8 +81,8 @@ class MailSenderTest : FunSpec() {
         test("Should have 'subject' and 'text' as configured in the constructor, replacing variables") {
             sendMail()
             shouldHavePosted {
-                it.shouldContainInBody("subject", "pname")
-                it.shouldContainInBody("text", "pname")
+                it.shouldContainInBody("subject", certificate.personName)
+                it.shouldContainInBody("text", certificate.personName)
             }
         }
         
@@ -90,7 +96,6 @@ class MailSenderTest : FunSpec() {
     }
     
     private fun sendMail() {
-        val certificate = Certificate("pname", LocalDate.now(), "etype", "ename", 40, "token")
         target.sendMail("to@example.com", certificate, "attachment!".toByteArray())
     }
     

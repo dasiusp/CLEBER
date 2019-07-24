@@ -1,7 +1,7 @@
 certificate:
   title: "Certificado de participação"
   body: >-
-    Certificamos que %NOME_PESSOA% participou do evento %TIPO_EVENTO% %NOME_EVENTO% realizado
+    Certificamos que %NOME_PESSOA% participou do evento %NOME_ATIVIDADE% realizado
     na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração
     de %DURACAO% horas.
   place.and.date: "São Paulo, %DATA%."
@@ -15,7 +15,7 @@ email:
   body: |-
     Olá, %NOME_PESSOA%!
 
-    Agradecemos a sua participação em %NOME_EVENTO%!
+    Agradecemos a sua participação em %NOME_ATIVIDADE%!
 
     Aqui está o seu certificado de participação. Esperamos você em nossa próxima atividade!
 

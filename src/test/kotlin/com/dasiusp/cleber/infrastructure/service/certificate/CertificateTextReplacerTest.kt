@@ -1,19 +1,18 @@
-package com.dasiusp.cleber.certificate
+package com.dasiusp.cleber.infrastructure.service.certificate
 
+import com.dasiusp.cleber.type.certificate
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FunSpec
-import java.time.LocalDate
 
 class CertificateTextReplacerTest : FunSpec() {
     
-    private val certificate = Certificate("name", LocalDate.of(1998, 2, 9), "type", "ename", 30, "token")
     private val target = CertificateTextReplacer(certificate)
     
     init {
         test("Should replace every variable with the certificate value") {
-            val stringWithVariables = "%NOME_PESSOA% %TIPO_EVENTO% %NOME_EVENTO% %DURACAO% %TOKEN%"
+            val stringWithVariables = "%NOME_PESSOA% %NOME_ATIVIDADE% %DURACAO% %TOKEN%"
             
-            target.replaceOn(stringWithVariables) shouldBe "name type ename 30 token"
+            target.replaceOn(stringWithVariables) shouldBe "${certificate.personName} ${certificate.activityName} ${certificate.durationInHours} ${certificate.token}"
         }
         
         test("Should format date variable to correct format") {

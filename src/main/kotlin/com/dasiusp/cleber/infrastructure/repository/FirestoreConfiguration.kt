@@ -1,4 +1,4 @@
-package com.dasiusp.cleber.infrastructure
+package com.dasiusp.cleber.infrastructure.repository
 
 import com.google.cloud.firestore.FirestoreOptions
 import org.springframework.context.annotation.Bean
