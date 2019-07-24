@@ -7,11 +7,12 @@ certificate:
   token.guide: "Autenticidade pode ser verificada em https://www.dasiusp.com/certificado"
   token.text: "Código de autenticidade: %TOKEN%"
 
+project.id: "cleber-244103"
+
 email:
-  mailgun.api.key.url: "https://runtimeconfig.googleapis.com/v1beta1/projects/cleber-244103/configs/APIs/variables/mailgun"
   from: "DASI-USP <no-reply@dasiusp.com>"
   attachment.name: "Certificado.pdf"
-  subject: "Certificado de Participação - %NOME_EVENTO%"
+  subject: "Certificado de Participação - %NOME_ATIVIDADE%"
   body: |-
     Olá, %NOME_PESSOA%!
 
