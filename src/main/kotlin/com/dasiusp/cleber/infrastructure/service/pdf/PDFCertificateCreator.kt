@@ -11,7 +11,8 @@ class PDFCertificateCreator(
     @Value("\${certificate.title}") private val certificateTitleText: String,
     @Value("\${certificate.body}") private val certificateBodyText: String,
     @Value("\${certificate.place.and.date}") private val certificatePlaceAndDateText: String,
-    @Value("\${certificate.token}") private val certificateTokenText: String
+    @Value("\${certificate.token.guide}") private val certificateTokenGuideText: String,
+    @Value("\${certificate.token.text}") private val certificateTokenText: String
 ) {
     
     fun createPdf(certificate: Certificate): ByteArray {
@@ -22,6 +23,7 @@ class PDFCertificateCreator(
                     replaceOn(certificateTitleText),
                     replaceOn(certificateBodyText),
                     replaceOn(certificatePlaceAndDateText),
+                    replaceOn(certificateTokenGuideText),
                     replaceOn(certificateTokenText)
                 )
             }
