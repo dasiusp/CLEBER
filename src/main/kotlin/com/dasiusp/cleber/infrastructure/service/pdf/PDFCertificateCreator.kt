@@ -1,7 +1,7 @@
-package com.dasiusp.cleber.pdf
+package com.dasiusp.cleber.infrastructure.service.pdf
 
-import com.dasiusp.cleber.certificate.Certificate
-import com.dasiusp.cleber.certificate.CertificateTextReplacer
+import com.dasiusp.cleber.infrastructure.service.certificate.CertificateTextReplacer
+import com.dasiusp.cleber.type.Certificate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 

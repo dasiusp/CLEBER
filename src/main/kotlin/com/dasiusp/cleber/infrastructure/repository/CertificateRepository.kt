@@ -1,6 +1,6 @@
-package com.dasiusp.cleber.infrastructure
+package com.dasiusp.cleber.infrastructure.repository
 
-import com.dasiusp.cleber.certificate.Certificate
+import com.dasiusp.cleber.type.Certificate
 import com.google.cloud.firestore.CollectionReference
 import com.google.cloud.firestore.Firestore
 import com.google.cloud.firestore.annotation.PropertyName
@@ -18,7 +18,11 @@ class CertificateRepository(
     get() = firestore.collection(collectionName)
     
     fun insert(certificate: Certificate) {
-        collection.document(certificate.token).set(CertificateEntity(certificate)).get()
+        collection.document("${certificate.token}").set(
+            CertificateEntity(
+                certificate
+            )
+        ).get()
     }
 }
 
@@ -45,9 +49,9 @@ data class CertificateEntity(
 ) {
     constructor(certificate: Certificate) : this(
         certificate.personName,
-        certificate.date.format(DateTimeFormatter.ISO_LOCAL_DATE),
-        certificate.eventName,
+        certificate.activityDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+        certificate.activityName,
         certificate.durationInHours,
-        certificate.token
+        certificate.token.toString()
     )
 }

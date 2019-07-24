@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.31"
+    id("org.jetbrains.kotlin.jvm") version "1.3.41"
 
     // Spring
     id("org.springframework.boot") version "2.1.5.RELEASE"
@@ -11,7 +11,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.3.31"
 
     // AppEngine deploy
-    id("net.thauvin.erik.gradle.semver") version "0.9.9-beta"
+    id("net.thauvin.erik.gradle.semver") version "1.0.2"
     war
     id("com.google.cloud.tools.appengine").version("2.0.0-rc5")
     
@@ -70,6 +70,6 @@ configure<AppEngineStandardExtension> {
         projectId = "cleber-244103"
         stopPreviousVersion = true
         promote = true
-        version = "${props["version.major"]}-${props["version.minor"]}-${props["version.patch"]}"
+        version = "${props["version.semver"]}"
     }
 }

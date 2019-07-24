@@ -1,6 +1,6 @@
-package com.dasiusp.cleber.email
+package com.dasiusp.cleber.infrastructure.service.email
 
-import com.dasiusp.cleber.certificate.Certificate
+import com.dasiusp.cleber.type.Certificate
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpEntity

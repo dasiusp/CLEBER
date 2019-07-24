@@ -1,4 +1,4 @@
-package com.dasiusp.cleber.email
+package com.dasiusp.cleber.infrastructure.service.email
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Value
