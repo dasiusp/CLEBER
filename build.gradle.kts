@@ -19,6 +19,7 @@ plugins {
 
 repositories {
     jcenter()
+    google()
     mavenCentral()
 }
 
@@ -36,8 +37,11 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     
     // PDF
-    implementation(group= "org.apache.pdfbox", name= "pdfbox", version= "2.0.15")
-
+    implementation(group = "org.apache.pdfbox", name = "pdfbox", version = "2.0.15")
+    
+    // Firestore database
+    implementation("com.google.cloud:google-cloud-firestore:1.9.0")
+    
     // KotlinTest
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.2")
     testImplementation("io.kotlintest:kotlintest-extensions-spring:3.3.2")
