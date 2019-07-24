@@ -7,6 +7,7 @@ import io.kotlintest.specs.FunSpec
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.common.PDRectangle
 import org.apache.pdfbox.text.PDFTextStripper
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class PDFCertificateCreatorTest : FunSpec() {
@@ -17,8 +18,8 @@ class PDFCertificateCreatorTest : FunSpec() {
             val document = PDDocument.load(bytes)
             val stripper = PDFTextStripper()
             val text = stripper.getText(document)
-            text.withoutLinebreaks() shouldContain "Certificado de participação Certificamos que ${certificate.personName} participou do evento ${certificate.activityName} realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de ${certificate.durationInHours} horas. São Paulo, ${certificate.activityDate.format(
-                DateTimeFormatter.ofPattern("dd/MM/yyyy"))}. ${certificate.token}"
+            text.withoutLinebreaks() shouldContain "Certificado de participação Certificamos que ${certificate.personName} participou do evento ${certificate.activityName} realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de ${certificate.durationInHours} horas. São Paulo, ${LocalDate.now().format(
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"))}. TOKEN GUIDE ${certificate.token}"
         }
         
         test("Should create pdf in landscape format") {
@@ -39,7 +40,8 @@ class PDFCertificateCreatorTest : FunSpec() {
         return PDFCertificateCreator(
             "Certificado de participação",
             "Certificamos que %NOME_PESSOA% participou do evento %NOME_ATIVIDADE% realizado na Escola de Artes Ciências e Humanidades da Universidade de São Paulo EACH-USP, com duração de %DURACAO% horas.",
-            "São Paulo, %DATA%.",
+            "São Paulo, %HOJE%.",
+            "TOKEN GUIDE",
             "%TOKEN%"
         ).createPdf(certificate)
     }

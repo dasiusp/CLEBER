@@ -11,6 +11,7 @@ class CertificateTextReplacer(private val certificate: Certificate) {
         .replace("%NOME_ATIVIDADE%", certificate.activityName)
         .replace("%DURACAO%", "${certificate.durationInHours}")
         .replace("%DATA%", certificate.activityDate.formatDate())
+        .replace("%HOJE%", LocalDate.now().formatDate())
         .replace("%TOKEN%", certificate.token.toString())
     
     private fun LocalDate.formatDate() = format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))

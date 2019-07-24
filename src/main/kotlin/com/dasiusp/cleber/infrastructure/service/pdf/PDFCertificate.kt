@@ -17,6 +17,7 @@ class PDFCertificate(
     private val title: String,
     private val body: String,
     private val placeAndDate: String,
+    private val tokenGuideText: String,
     private val tokenText: String
 ) {
 
@@ -52,7 +53,7 @@ class PDFCertificate(
         val image = loadImage("logo")
         
         val margin = 150f
-        val logoWidth = 80f
+        val logoWidth = 90f
         val logoHeight = 90f
         
         drawImage(image, (documentWidth - logoWidth) / 2, documentHeight - margin, logoWidth, logoHeight)
@@ -110,12 +111,14 @@ class PDFCertificate(
     
     private fun PDPageContentStream.addPlaceAndDate() {
         setFont(PDType1Font.HELVETICA, 14f)
-        newLineAtOffset(0f, -50f)
+        newLineAtOffset(460f, -50f)
         showText(placeAndDate)
     }
     
     private fun PDPageContentStream.addTokenText() {
         setFont(PDType1Font.HELVETICA, 14f)
+        newLineAtOffset(-460f, -120f)
+        showText(tokenGuideText)
         newLineAtOffset(0f, -30f)
         showText(tokenText)
     }
