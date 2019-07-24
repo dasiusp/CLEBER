@@ -42,6 +42,10 @@ dependencies {
     // Firestore database
     implementation("com.google.cloud:google-cloud-firestore:1.9.0")
     
+    // Runtime Config
+    implementation("com.google.auth:google-auth-library-appengine:0.16.2")
+    implementation("com.google.apis:google-api-services-runtimeconfig:v1beta1-rev458-1.25.0")
+    
     // KotlinTest
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.2")
     testImplementation("io.kotlintest:kotlintest-extensions-spring:3.3.2")
