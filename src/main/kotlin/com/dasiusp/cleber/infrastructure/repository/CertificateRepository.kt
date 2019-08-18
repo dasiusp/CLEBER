@@ -15,7 +15,7 @@ class CertificateRepository(
 ) {
     
     private val collection: CollectionReference
-    get() = firestore.collection(collectionName)
+        get() = firestore.collection(collectionName)
     
     fun insert(certificate: Certificate) {
         collection.document("${certificate.token}").set(
@@ -23,6 +23,10 @@ class CertificateRepository(
                 certificate
             )
         ).get()
+    }
+    
+    fun get(token: String): CertificateEntity? {
+        return collection.document(token).get().get().toObject(CertificateEntity::class.java)
     }
 }
 
@@ -54,4 +58,7 @@ data class CertificateEntity(
         certificate.durationInHours,
         certificate.token.toString()
     )
+    
+    // Necessary to allow FireStore to create instances of this object
+    private constructor() : this("PLACEHOLDER", "PLACEHOLDER", "PLACEHOLDER", 0, "PLACEHOLDER")
 }
