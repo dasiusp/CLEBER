@@ -4,7 +4,7 @@ certificate:
     Certificamos que %NOME_PESSOA% participou da atividade %NOME_ATIVIDADE% com carga
     horária de %DURACAO% horas, no dia %DATA%.
   place.and.date: "São Paulo, %HOJE%"
-  token.guide: "Autenticidade pode ser verificada em https://www.dasiusp.com/certificado"
+  token.guide: "Autenticidade pode ser verificada em https://certificado.dasiusp.com"
   token.text: "Código de autenticidade: %TOKEN%"
 
 project.id: "cleber-244103"
